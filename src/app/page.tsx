@@ -145,7 +145,7 @@ export default function Home() {
 
           <div className="mt-4 flex items-center justify-center gap-4">
             <a
-              href="https://github.com"
+              href="https://github.com/superuserkalo"
               target="_blank"
               rel="noopener noreferrer"
               className="text-foreground transition-colors hover:text-muted-foreground"
@@ -154,7 +154,7 @@ export default function Home() {
               <Github className="h-5 w-5 ml-[3px]" />
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/kaloyan-gantchev/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-foreground transition-colors hover:text-muted-foreground"
@@ -165,15 +165,9 @@ export default function Home() {
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-  // <a
-  //    href="#"
-  //    className="inline-flex items-center gap-1.5 border-foreground px-3 py-1.5 text-sm transition-colors hover:bg-foreground hover:text-background tracking-normal border-2 border-double rounded-xs"
-  //  >
-  //    CV (English)
-  //  </a>
-            <a
-              href="#"
-              className="inline-flex items-center gap-1.5 border-foreground px-3 py-1.5 transition-colors hover:bg-foreground hover:text-background text-sm tracking-normal border-2 border-double rounded-xs"
+            <a href="/Lebenslauf_Kaloyan_Gantchev.pdf" className="inline-flex items-center gap-1.5 border-foreground px-3 py-1.5 transition-colors hover:bg-foreground hover:text-background text-sm tracking-normal border-2 border-double rounded-xs"
+            target="_blank"
+            rel="noopener noreferrer"
             >
               CV (German)
             </a>
@@ -189,12 +183,12 @@ export default function Home() {
             -- Projects / Work --
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[18px] ml-0 pl-0 mt-[-20px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-[-20px]">
             {works.map((work) => (
               <a
                 key={work.name}
                 href={buildPersonalLink(work.link)}
-                className="group block"
+                className="group flex h-full flex-col justify-between rounded-xs border border-border/60 bg-muted/10 p-4"
                 target="_blank"
                 rel="noreferrer noopener"
               >
