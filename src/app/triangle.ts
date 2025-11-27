@@ -1,5 +1,9 @@
 "use client";
 
+// Minimal ambient declarations so TypeScript accepts WebGPU globals.
+declare const GPUTextureUsage: any;
+declare const GPUBufferUsage: any;
+
 type Mat4 = Float32Array;
 
 function mat4Identity(): Mat4 {
@@ -54,20 +58,25 @@ function mat4RotateX(rad: number): Mat4 {
 }
 
 export async function renderTriangle(canvas: HTMLCanvasElement): Promise<() => void> {
-  const adapter = await navigator.gpu?.requestAdapter();
+  const gpu = (navigator as any).gpu;
+  const adapter = await gpu?.requestAdapter();
   const device = await adapter?.requestDevice();
   if (!device) {
     console.warn("WebGPU not supported in this browser");
     return () => {};
   }
 
-  const context = canvas.getContext("webgpu");
+  const context = canvas.getContext("webgpu") as any;
   if (!context) {
     console.warn("Unable to acquire a WebGPU context from the canvas");
     return () => {};
   }
 
-  const presentationFormat = navigator.gpu.getPreferredCanvasFormat();
+  const presentationFormat = gpu?.getPreferredCanvasFormat?.();
+  if (!presentationFormat) {
+    console.warn("WebGPU canvas format not available");
+    return () => {};
+  }
   const dpr = Math.max(1, window.devicePixelRatio || 1);
 
   const baseCssWidth = canvas.clientWidth || Number(canvas.getAttribute("width")) || 200;
@@ -102,7 +111,7 @@ export async function renderTriangle(canvas: HTMLCanvasElement): Promise<() => v
     }
   };
 
-  let depthTexture: GPUTexture | null = null;
+  let depthTexture: any = null;
   const createDepthTexture = (width: number, height: number) => {
     depthTexture?.destroy();
     depthTexture = device.createTexture({
@@ -226,10 +235,10 @@ export async function renderTriangle(canvas: HTMLCanvasElement): Promise<() => v
     entries: [{ binding: 0, resource: { buffer: uniformBuffer } }],
   });
 
-  const renderPassDescriptor: GPURenderPassDescriptor = {
+  const renderPassDescriptor: any = {
     colorAttachments: [
       {
-        view: undefined as unknown as GPUTextureView, // set each frame
+        view: undefined as any, // set each frame
         clearValue: [0, 0, 0, 0],
         loadOp: "clear",
         storeOp: "store",

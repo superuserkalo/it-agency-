@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ExternalLink, Github, Linkedin, Moon, Sun } from "lucide-react";
-import { renderTriangle } from "./triangle";
+import { useEffect } from "react";
+import { ExternalLink, Github, Linkedin } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { TriangleGraphic } from "@/components/triangle-graphic";
 
 const works = [
   {
@@ -56,77 +57,6 @@ function buildPersonalLink(link: string) {
   return `https://${trimmed}`;
 }
 
-function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialIsDark = saved === "dark" || saved === "light" ? saved === "dark" : prefersDark;
-    setIsDark(initialIsDark);
-    document.documentElement.classList.toggle("dark", initialIsDark);
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    document.documentElement.classList.toggle("dark", isDark);
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-  }, [isDark, mounted]);
-
-  if (!mounted) {
-    return (
-      <button className="flex h-9 w-9 items-center justify-center rounded-full transition-colors">
-        <span className="sr-only">Toggle theme</span>
-      </button>
-    );
-  }
-
-  return (
-    <button
-      onClick={() => setIsDark(!isDark)}
-      className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-      aria-label="Toggle theme"
-    >
-      {isDark ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
-    </button>
-  );
-}
-
-function TriangleCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    let cleanup: (() => void) | undefined;
-
-    renderTriangle(canvas)
-      .then((dispose) => {
-        cleanup = dispose;
-      })
-      .catch((error) => {
-        console.error("WebGPU triangle failed to render", error);
-      });
-
-    return () => {
-      cleanup?.();
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      width={200}
-      height={173}
-      className="bg-transparent"
-      style={{ filter: "drop-shadow(0 0 6px rgba(255,255,255,0.35))" }}
-    />
-  );
-}
-
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -175,7 +105,7 @@ export default function Home() {
         </header>
 
         <section className="mb-16 flex justify-center">
-          <TriangleCanvas />
+          <TriangleGraphic />
         </section>
 
         <section className="ml-0 leading-6">
